@@ -196,13 +196,13 @@ while on_switch.is_looping:
                                                     players[id]["name"], params))
 
             # 'look' command
-            elif command == "look":
+            elif command == "look" or command == "l":
 
                 # store the player's current room
                 rm = rooms[players[id]["room"]]
 
                 # send the player back the description of their current room
-                mud.send_message(id, rm["description"])
+                mud.look(players[id], focus="high")
 
                 playershere = []
                 # go through every player in the game

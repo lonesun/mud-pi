@@ -237,6 +237,18 @@ class MudServer(object):
             self.send_message(clid, "Upcoming adventure for week {} on {}:".format(week, day))
             to_mud(self, clid, "dta/ascii_art/castle.txt")
 
+    def look(self, id, focus=""):
+        if focus == "high":
+            self.send_message(id, "")
+            self.send_message(id, "=" * 77)
+            self.send_message(id, "=== " + rm["name"] + " " + "=" * (72 - len(rm["name"])))
+            self.send_message(id, "")
+            self.send_message(id, rm["description"])
+            self.send_message(id, "=" * 77)
+        if focus == "glance":
+            self.send_message(id, "")
+            self.send_message(id, rm["description"])
+
     def _attempt_send(self, clid, data):
         # python 2/3 compatability fix - convert non-unicode string to unicode
         if sys.version < '3' and type(data) != unicode:
