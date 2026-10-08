@@ -21,31 +21,26 @@ while on_switch.is_pressed:
 
     mud.update() # tick/update the state of the MUD server
 
-    # go through any newly connected players
     for id in mud.get_new_players():
 
-        players[id] = { # if [id] exists in [store], fetch name and room to continue from; otherwise, initialise them as None
+        players[id] = {
             "name": None,
             "room": None,
         }
 
         mud.motd(week=time.strftime("%U"), day=time.strftime("%A"))
 
-        # send the new player a prompt for their name
         mud.send_message(id, "What is your name?")
 
-    # go through any recently disconnected players
     for id in mud.get_disconnected_players():
 
-        # if for any reason the player isn't in the player map, skip them and
-        # move on to the next one
+        # if for any reason the player isn't in the player map, skip them and move on to the next one
         if id not in players:
             continue
 
         # go through all the players in the game
         for pid, pl in players.items():
-            # send each player a message to tell them about the diconnected
-            # player
+            # send each player a message to tell them about the diconnected player
             mud.send_message(pid, "{} quit the game".format(
                                                         players[id]["name"]))
 
@@ -55,13 +50,11 @@ while on_switch.is_pressed:
     # go through any new commands sent from players
     for id, command, params in mud.get_commands():
 
-        # if for any reason the player isn't in the player map, skip them and
-        # move on to the next one
+        # if for any reason the player isn't in the player map, skip them and move on to the next one
         if id not in players:
             continue
 
-        # if the player hasn't given their name yet, use this first command as
-        # their name and move them to the starting room.
+        # if the player hasn't given their name yet, use this first command as their name and move them to the starting room.
         if players[id]["name"] is None:
 
             players[id]["name"] = command
@@ -81,8 +74,7 @@ while on_switch.is_pressed:
             # send the new player the description of their current room
             mud.send_message(id, rooms[players[id]["room"]]["description"])
 
-        # each of the possible commands is handled below. Try adding new
-        # commands to the game!
+        # each of the possible commands is handled below:
 
         # 'help' command
         elif command == "help":
