@@ -4,6 +4,7 @@ import keyboard
 
 from mudserver import MudServer
 from world.areas import get_recipients
+from players import save as save_players, load as load_players, forget as forget_players
 
 """A simple Multi-User Dungeon (MUD) game."""
 
@@ -41,10 +42,19 @@ while on_switch.is_looping:
     def reset_game():
 
         game_start.is_looping = False
+        save_players(players, "players_backup.json")
+        print("Players backed up to 'players_backup.json'.")
+
+        players.clear()
 
         mud.shutdown()
 
         mud.bootup()
+
+        players = load_players("players_backup.json")
+
+        forget_players("players_backup.json")
+        print("Players restored from 'players_backup.json'.")
 
         print("Game cache cleared and restarted.")
         continue
