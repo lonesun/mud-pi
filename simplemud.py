@@ -43,7 +43,7 @@ while on_switch.is_pressed:
         # go through all the players in the game
         for pid, pl in players.items():
             # send each player a message to tell them about the diconnected player
-            mud.send_message(pid, "{} quit the game".format(
+            mud.send_message(pid, "[GAME] {} left the game.".format(
                                                         players[id]["name"]))
 
         # remove the player's entry in the player dictionary
@@ -99,7 +99,7 @@ while on_switch.is_pressed:
                 # if they're in the same room as the player
                 if players[pid]["room"] == players[id]["room"]:
                     # send them a message telling them what the player said
-                    mud.send_message(pid, "{} says: {}".format(
+                    mud.send_message(pid, "{} says, \"{}\"".format(
                                                 players[id]["name"], params))
 
         # 'look' command
