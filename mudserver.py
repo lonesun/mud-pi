@@ -25,9 +25,6 @@ class MudServer(object):
     running.
     """
 
-    # An inner class which is instantiated for each connected client to store
-    # info about them
-
     class _Client(object):
         """Holds information about a connected player"""
 
