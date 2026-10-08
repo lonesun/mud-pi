@@ -14,6 +14,12 @@ players = {}
 
 mud = MudServer()
 
+def save_player(player):
+    """Persists a named player's room to the roster so they can resume where they left off."""
+    if player["name"] is None:
+        return
+    save_user_data(player["name"], player["room"], expected_field="current_room")
+
 from world import area_array as rooms
 
 # control_switch(eingangspunkt)
@@ -126,6 +132,8 @@ while on_switch.is_looping:
                 mud.send_message(pid, "[GAME] {} left the game.".format(
                                                             players[id]["name"]))
 
+            save_player(players[id])
+
             # remove the player's entry in the player dictionary
             del(players[id])
 
@@ -138,8 +146,8 @@ while on_switch.is_looping:
 
             # if the player hasn't given their name yet, use this first command as their name and move them to the starting room.
             if players[id]["name"] is None:
-                current_room = attempt_load(players[id]["name"], expected_field="current_room")
-                description = attempt_load(players[id]["name"], expected_field="description")
+                current_room = attempt_load(command, expected_field="current_room")
+                description = attempt_load(command, expected_field="description")
 
                 players[id]["name"] = command
                 players[id]["description"] = description
@@ -301,8 +309,13 @@ while on_switch.is_looping:
             if command == "quit" or command == "q" or command == "QUIT":
                 mud.send_message(id, "Goodbye!")
                 # Perform any necessary cleanup for the player here
-                save_user_data(players[id]["name"], players[id]["room"], "dta/players/roster.db", expected_field="current_room")
+                save_player(players[id])
+                for pid in players:
+                    if pid != id:
+                        mud.send_message(pid, "[GAME] {} left the game.".format(
+                                                            players[id]["name"]))
                 del players[id]
+                mud.disconnect_client(id)
 
             # some other, unrecognised command
             else:

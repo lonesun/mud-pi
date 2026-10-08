@@ -196,6 +196,16 @@ class MudServer(object):
         # stop listening for new clients
         self._listen_socket.close()
 
+    def disconnect_client(self, clid):
+        cl = self._clients.pop(clid, None)
+        if cl is None:
+            return
+        try:
+            cl.socket.shutdown(socket.SHUT_RDWR)
+        except socket.error:
+            pass  # already gone
+        cl.socket.close()
+
     def bootup(self):
         """Starts up the server, preparing it to accept new client connections."""
         # create the listen socket
@@ -206,7 +216,7 @@ class MudServer(object):
 
     def motd(self, week, day):
         """Sends message of the day to all connecting players."""
-        for clid in self._clients:
+        for clid in list(self._clients):
             self.send_message(clid, "")
             self.send_message(clid, "")
             self.send_message(clid, "")
@@ -223,7 +233,7 @@ class MudServer(object):
 
     def ascii_art(self, week, day):
         """Sends upcoming adventure ASCII art to all connecting players."""
-        for clid in self._clients:
+        for clid in list(self._clients):
             self.send_message(clid, "Upcoming adventure for week {} on {}:".format(week, day))
             to_mud(self, clid, "dta/ascii_art/castle.txt")
 
