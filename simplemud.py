@@ -26,13 +26,21 @@ while on_switch.is_pressed:
 
         players[id] = {
             "name": None,
+            "echo": None,
             "room": None,
             "area": None,
         }
 
-        mud.motd(week=time.strftime("%U"), day=time.strftime("%A"))
 
-        mud.send_message(id, "What is your name?")
+        week_count = time.strftime("%U")
+        dotw = time.strftime("%A")
+        mud.motd(week=week_count, day=dotw)
+
+        # upcoming adventure art
+        mud.ascii_art(week=week_count + 1, day=dotw)
+
+        mud.send_message(id, "Greetings! What, tell me now, is /your/ name?")
+        mud.send_message(id, "Please enter your name:")
 
     for id in mud.get_disconnected_players():
 
@@ -60,6 +68,8 @@ while on_switch.is_pressed:
         if players[id]["name"] is None:
 
             players[id]["name"] = command
+            players[id]["echo_content"] = "An exceptional actor"
+            players[id]["echo"] = players[id]["echo_content"]
             players[id]["room"] = "Tavern"
             players[id]["area"] = rooms[players[id]["room"]]["area"]
 
@@ -120,10 +130,15 @@ while on_switch.is_pressed:
                     if players[pid]["name"] is not None:
                         # add their name to the list
                         playershere.append(players[pid]["name"])
+                        playershere.append(players[pid]["echo"])
+                        playershere.sort()
+
 
             # send player a message containing the list of players in the room
-            mud.send_message(id, "Players here: {}".format(
-                                                    ", ".join(playershere)))
+            mud.send_message(id, "-" * 77)
+            mud.send_message(id, "Players/actors here:\n{},    \n    {}".format(
+                                                    " ".join(playershere[::2]), ", ".join(playershere[1::2])))
+            mud.send_message(id, "-" * 77)
 
             # send player a message containing the list of exits from this room
             mud.send_message(id, "Exits are: {}".format(

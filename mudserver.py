@@ -202,7 +202,19 @@ class MudServer(object):
         day -- the current day of the week
         """
         for clid in self._clients:
-            self.send_message(clid, "Welcome! Today is {}, week {}.".format(day, week))
+            self.send_message(clid, "Welcome to the MUD server!")
+            self.send_message(clid, "Welcome! Today, a {}, falls on week {} out of 52.".format(day, week))
+
+    def ascii_art(self, week, day):
+        """Sends upcoming adventure ASCII art to all connecting players.
+
+        Parameters:
+        week -- the week number for the upcoming adventure
+        day -- the day of the week for the upcoming adventure
+        """
+        for clid in self._clients:
+            self.send_message(clid, "Upcoming adventure for week {} on {}:".format(week, day))
+            self.send_message(clid, "(ASCII art goes here)")
 
     def _attempt_send(self, clid, data):
         # python 2/3 compatability fix - convert non-unicode string to unicode
