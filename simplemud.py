@@ -306,7 +306,7 @@ while on_switch.is_looping:
                     mud.send_message(pid, "Somewhere nearby...\n...{} {}".format(
                                                 players[id]["name"], params))
 
-            if command == "quit" or command == "q" or command == "QUIT":
+            elif command == "quit" or command == "q" or command == "QUIT":
                 mud.send_message(id, "Goodbye!")
                 # Perform any necessary cleanup for the player here
                 save_player(players[id])
