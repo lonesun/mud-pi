@@ -6,6 +6,8 @@ from mudserver import MudServer
 from world.areas import get_recipients
 from players import save as save_players, load as load_players, forget as forget_players
 
+from src import attempt_load, save_user_data, seed_database
+
 """A simple Multi-User Dungeon (MUD) game."""
 
 players = {}
@@ -62,6 +64,7 @@ while on_switch.is_looping:
 
     while game_start.is_looping:
 
+        """
         if keyboard.is_pressed("q"):
             print("Shutting down the game loop.")
             shutdown_game()
@@ -80,6 +83,7 @@ while on_switch.is_looping:
         if keyboard.is_pressed("r"):
             print("Resetting the game loop.")
             reset_game()
+        """
 
         cpu_cycle = time.sleep(0.2)
         cpu_cycle # cycle the game loop without consuming 100% CPU
@@ -95,6 +99,8 @@ while on_switch.is_looping:
                 "area": None,
             }
 
+            print("New player connected with ID:", id)
+            print("Sending MOTD to new player with ID:", id)
 
             week_count = time.strftime("%U")
             dotw = time.strftime("%A")
@@ -132,11 +138,14 @@ while on_switch.is_looping:
 
             # if the player hasn't given their name yet, use this first command as their name and move them to the starting room.
             if players[id]["name"] is None:
+                current_room = attempt_load(players[id]["name"], expected_field="current_room")
+                description = attempt_load(players[id]["name"], expected_field="description")
 
                 players[id]["name"] = command
+                players[id]["description"] = description
                 players[id]["echo_content"] = "An exceptional actor"
                 players[id]["echo"] = players[id]["echo_content"]
-                players[id]["room"] = "Tavern"
+                players[id]["room"] = current_room or "Tavern"
                 players[id]["area"] = rooms[players[id]["room"]]["area"]
 
                 # go through all the players in the game
@@ -288,6 +297,12 @@ while on_switch.is_looping:
                 for pid in get_recipients(command, id, same_area):
                     mud.send_message(pid, "Somewhere nearby...\n...{} {}".format(
                                                 players[id]["name"], params))
+
+            if command == "quit" or command == "q" or command == "QUIT":
+                mud.send_message(id, "Goodbye!")
+                # Perform any necessary cleanup for the player here
+                save_user_data(players[id]["name"], players[id]["room"], "dta/players/roster.db", expected_field="current_room")
+                del players[id]
 
             # some other, unrecognised command
             else:
