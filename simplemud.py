@@ -2,6 +2,7 @@ from threading import local
 import time
 
 from mudserver import MudServer
+from world.areas import get_recipients
 
 """A simple Multi-User Dungeon (MUD) game."""
 
@@ -26,6 +27,7 @@ while on_switch.is_pressed:
         players[id] = {
             "name": None,
             "room": None,
+            "area": None,
         }
 
         mud.motd(week=time.strftime("%U"), day=time.strftime("%A"))
@@ -59,6 +61,7 @@ while on_switch.is_pressed:
 
             players[id]["name"] = command
             players[id]["room"] = "Tavern"
+            players[id]["area"] = "tavern01"
 
             # go through all the players in the game
             for pid, pl in players.items():
@@ -173,6 +176,29 @@ while on_switch.is_pressed:
             else:
                 # send back an 'unknown exit' message
                 mud.send_message(id, "Unknown exit '{}'".format(ex))
+
+        # !!!NEW!!!
+        elif command == "emote" or command == "pose":
+            emote_text = params
+            emote_listener = EmoteListener()
+            emote_listener.notify(emote_text)
+
+            for pid, pl in players.items():
+                if players[pid]["room"] == players[id]["room"]:
+                    mud.send_message(pid, "{} {}".format(
+                                                players[id]["name"], params))
+
+        # !!!NEW!!!
+        elif command == "gush":
+            gush_text = params
+            emote_listener = EmoteListener()
+            emote_listener.notify(gush_text)
+
+            same_area = [pid for pid in players
+                         if players[pid]["area"] == players[id]["area"]]
+            for pid in get_recipients(command, id, same_area):
+                mud.send_message(pid, "Somewhere nearby...\n...{} {}".format(
+                                            players[id]["name"], params))
 
         # some other, unrecognised command
         else:
