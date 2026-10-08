@@ -5,21 +5,11 @@ from mudserver import MudServer
 
 """A simple Multi-User Dungeon (MUD) game."""
 
-rooms = {
-    "Tavern": {
-        "description": "You're in a cozy tavern warmed by an open fire.",
-        "exits": {"outside": "Outside"},
-    },
-    "Outside": {
-        "description": "You're standing outside a tavern. It's raining.",
-        "exits": {"inside": "Tavern"},
-    }
-}
-
 players = {}
 
 mud = MudServer()
 
+from world import area_array as rooms
 
 # control_switch(eingangspunkt)
 on_switch = local()
