@@ -1,5 +1,6 @@
 from threading import local
 import time
+import keyboard
 
 from mudserver import MudServer
 from world.areas import get_recipients
@@ -14,8 +15,64 @@ from world import area_array as rooms
 
 # control_switch(eingangspunkt)
 on_switch = local()
-on_switch.is_pressed = True
-while on_switch.is_pressed:
+game_start = local()
+on_switch.is_looping = True
+while on_switch.is_looping:
+
+    def shutdown_game():
+        game_start.is_looping = False
+        input("Press Enter to confirm shutdown...")
+        on_switch.is_looping = False
+        mud.shutdown() # gracefully shut down the MUD server
+        break
+
+    def pause_game():
+        game_start.is_looping = False
+        continue
+
+    def resume_game():
+        game_start.is_looping = True
+        continue
+
+    def show_game_info():
+        print("Displaying information about the game loop.")
+        print("Current players:", list(players.keys()))
+
+    def reset_game():
+
+        game_start.is_looping = False
+
+        mud.shutdown()
+
+        mud.bootup()
+
+        print("Game cache cleared and restarted.")
+        continue
+
+    # game_start = local()
+    game_start.time = time.time()
+    game_start.is_looping = True
+
+    while game_start.is_looping:
+
+    if keyboard.is_pressed("q"):
+        print("Shutting down the game loop.")
+        shutdown_game()
+
+    if keyboard.is_pressed("p"):
+        print("Pausing the game loop.")
+        pause_game()
+
+    if keyboard.is_pressed("p") and not game_start.is_looping:
+        print("Resuming the game loop.")
+        resume_game()
+
+    if keyboard.is_pressed("i"):
+        show_game_info()
+
+    if keyboard.is_pressed("r"):
+        print("Resetting the game loop.")
+        reset_game()
 
     cpu_cycle = time.sleep(0.2)
     cpu_cycle # cycle the game loop without consuming 100% CPU
