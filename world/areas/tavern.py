@@ -1,12 +1,28 @@
-from . import into_overworld_map
+import time
+
+from . import into_overworld_map, get_season
+
+SEASON = get_season()
+print("Current season:", SEASON)
+WEATHER = "clear"
+
+import random
+random_objects = ["a mug", "a chair", "a table", "a barrel"]
+
+seasonal = {
+    "spring": "The tavern is adorned with fresh flowers and a light breeze flows through the open windows",
+    "summer": "The tavern is filled with the warm glow of sunlight streaming through the windows",
+    "autumn": "The tavern is decorated with autumn leaves and the air is crisp with the changing season",
+    "winter": "The tavern is warm and cozy, with a roaring fire and snow falling outside the windows"
+}
 
 gebiet = {
     "Tavern": {
-        "description": "You're in a cozy tavern warmed by an open fire.",
+        "description": "{}. You can see {}.".format(seasonal[SEASON], random.choice(random_objects)),
         "exits": {"outside": "Outside"},
     },
     "Outside": {
-        "description": "You're standing outside a tavern. It's raining.",
+        "description": "You're standing outside a tavern. The weather is {}.".format(WEATHER),
         "exits": {"inside": "Tavern"},
     }
 }
