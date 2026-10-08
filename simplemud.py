@@ -104,7 +104,7 @@ while on_switch.is_looping:
             mud.motd(week=week_count, day=dotw)
 
             # upcoming adventure art
-            mud.ascii_art(week=week_count + 1, day=dotw)
+            mud.ascii_art(week=week_count, day=dotw)
 
             mud.send_message(id, "Greetings! What, tell me now, is /your/ name?")
             mud.send_message(id, "Please enter your name:")
