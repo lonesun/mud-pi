@@ -101,13 +101,15 @@ while on_switch.is_looping:
 
             week_count = time.strftime("%U")
             dotw = time.strftime("%A")
-            mud.motd(week=week_count, day=dotw)
 
             # upcoming adventure art
             mud.ascii_art(week=week_count, day=dotw)
 
+            mud.motd(week=week_count, day=dotw)
+
             mud.send_message(id, "Greetings! What, tell me now, is /your/ name?")
             mud.send_message(id, "Please enter your name:")
+            mud.send_message(id, "")
 
         for id in mud.get_disconnected_players():
 

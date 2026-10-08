@@ -13,6 +13,8 @@ import select
 import time
 import sys
 
+from dta import to_mud
+
 
 class MudServer(object):
     """A basic server for text-based Multi-User Dungeon (MUD) games.
@@ -210,8 +212,19 @@ class MudServer(object):
         day -- the current day of the week
         """
         for clid in self._clients:
+            self.send_message(clid, "")
+            self.send_message(clid, "")
+            self.send_message(clid, "")
+            self.send_message(clid, "")
             self.send_message(clid, "Welcome to the MUD server!")
-            self.send_message(clid, "Welcome! Today, a {}, falls on week {} out of 52.".format(day, week))
+            self.send_message(clid, "---------------------------------------------------------------------")
+            self.send_message(clid, "This is a dual-character MUD world,")
+            self.send_message(clid, "in which a player logs in with both their avatar and their persona.")
+            self.send_message(clid, "Interactions from both characters are recommended so as to get the")
+            self.send_message(clid, "best experience.")
+            self.send_message(clid, "---------------------------------------------------------------------")
+            self.send_message(clid, "Today, a {}, falls on week {} out of 52.".format(day, week))
+            self.send_message(clid, "---------------------------------------------------------------------")
 
     def ascii_art(self, week, day):
         """Sends upcoming adventure ASCII art to all connecting players.
@@ -222,7 +235,7 @@ class MudServer(object):
         """
         for clid in self._clients:
             self.send_message(clid, "Upcoming adventure for week {} on {}:".format(week, day))
-            self.send_message(clid, "(ASCII art goes here)")
+            to_mud(self, clid, "dta/ascii_art/castle.txt")
 
     def _attempt_send(self, clid, data):
         # python 2/3 compatability fix - convert non-unicode string to unicode
