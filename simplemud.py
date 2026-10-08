@@ -69,13 +69,13 @@ while on_switch.is_looping:
             print("Shutting down the game loop.")
             shutdown_game()
 
-        if keyboard.is_pressed("p"):
-            print("Pausing the game loop.")
-            pause_game()
-
         if keyboard.is_pressed("p") and not game_start.is_looping:
             print("Resuming the game loop.")
             resume_game()
+
+        if keyboard.is_pressed("p"):
+            print("Pausing the game loop.")
+            pause_game()
 
         if keyboard.is_pressed("i"):
             show_game_info()
