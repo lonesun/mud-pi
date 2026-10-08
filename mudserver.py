@@ -205,12 +205,7 @@ class MudServer(object):
         self._listen_socket.listen(5)
 
     def motd(self, week, day):
-        """Sends message of the day to all connecting players.
-
-        Parameters:
-        week -- the current week number
-        day -- the current day of the week
-        """
+        """Sends message of the day to all connecting players."""
         for clid in self._clients:
             self.send_message(clid, "")
             self.send_message(clid, "")
@@ -227,12 +222,7 @@ class MudServer(object):
             self.send_message(clid, "---------------------------------------------------------------------")
 
     def ascii_art(self, week, day):
-        """Sends upcoming adventure ASCII art to all connecting players.
-
-        Parameters:
-        week -- the week number for the upcoming adventure
-        day -- the day of the week for the upcoming adventure
-        """
+        """Sends upcoming adventure ASCII art to all connecting players."""
         for clid in self._clients:
             self.send_message(clid, "Upcoming adventure for week {} on {}:".format(week, day))
             to_mud(self, clid, "dta/ascii_art/castle.txt")

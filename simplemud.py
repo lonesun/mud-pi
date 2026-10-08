@@ -25,15 +25,12 @@ while on_switch.is_looping:
         input("Press Enter to confirm shutdown...")
         on_switch.is_looping = False
         mud.shutdown() # gracefully shut down the MUD server
-        break
 
     def pause_game():
         game_start.is_looping = False
-        continue
 
     def resume_game():
         game_start.is_looping = True
-        continue
 
     def show_game_info():
         print("Displaying information about the game loop.")
@@ -57,7 +54,7 @@ while on_switch.is_looping:
         print("Players restored from 'players_backup.json'.")
 
         print("Game cache cleared and restarted.")
-        continue
+        return
 
     # game_start = local()
     game_start.time = time.time()
