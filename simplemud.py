@@ -61,7 +61,7 @@ while on_switch.is_pressed:
 
             players[id]["name"] = command
             players[id]["room"] = "Tavern"
-            players[id]["area"] = "tavern01"
+            players[id]["area"] = rooms[players[id]["room"]]["area"]
 
             # go through all the players in the game
             for pid, pl in players.items():
@@ -130,10 +130,12 @@ while on_switch.is_pressed:
                                                     ", ".join(rm["exits"])))
 
         # 'go' command
-        elif command == "go":
+        elif command == "goto":
 
-            # store the exit name
-            ex = params.lower()
+            # store the exit name, just the first word of the parameters
+            ex = params.lower().split()[0]
+            # store the rest of the parameters as the (optional) emote text
+            emote_text = " ".join(params.lower().split()[1:])
 
             # store the player's current room
             rm = rooms[players[id]["room"]]
@@ -146,15 +148,24 @@ while on_switch.is_pressed:
                     # if player is in the same room and isn't the player
                     # sending the command
                     if players[pid]["room"] == players[id]["room"] \
+                            and pid != id \
+                            and emote_text:
+
+                        mud.send_message(pid, "{} => {}: {} {}".format(
+                                                      players[id]["name"], ex, players[id]["name"], emote_text))
+
+                    elif players[pid]["room"] == players[id]["room"] \
                             and pid != id:
                         # send them a message telling them that the player
                         # left the room
-                        mud.send_message(pid, "{} left via exit '{}'".format(
+
+                        mud.send_message(pid, "{} left towards '{}'.".format(
                                                       players[id]["name"], ex))
 
                 # update the player's current room to the one the exit leads to
                 players[id]["room"] = rm["exits"][ex]
                 rm = rooms[players[id]["room"]]
+                players[id]["area"] = rm["area"]
 
                 # go through all the players in the game
                 for pid, pl in players.items():

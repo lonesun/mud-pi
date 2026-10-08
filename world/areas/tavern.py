@@ -18,13 +18,16 @@ seasonal = {
 }
 
 gebiet = {
+
     "Tavern": {
         "description": "{}. You can see {}.".format(seasonal[SEASON], random.choice(random_objects)),
         "exits": {"outside": "Outside"},
+        "area": "tavern01",
     },
     "Outside": {
         "description": "You're standing outside a tavern. The weather is {}.".format(WEATHER),
-        "exits": {"inside": "Tavern"},
+        "exits": {"inside": "Tavern", "path": "Forest"},
+        "area": "tavern01",
     }
 }
 
