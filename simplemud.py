@@ -33,6 +33,8 @@ while True:
             "room": None,
         }
 
+        mud.motd(week=time.strftime("%U"), day=time.strftime("%A"))
+
         # send the new player a prompt for their name
         mud.send_message(id, "What is your name?")
 

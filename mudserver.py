@@ -194,6 +194,16 @@ class MudServer(object):
         # stop listening for new clients
         self._listen_socket.close()
 
+    def motd(self, week, day):
+        """Sends message of the day to all connecting players.
+
+        Parameters:
+        week -- the current week number
+        day -- the current day of the week
+        """
+        for clid in self._clients:
+            self.send_message(clid, "Welcome! Today is {}, week {}.".format(day, week))
+
     def _attempt_send(self, clid, data):
         # python 2/3 compatability fix - convert non-unicode string to unicode
         if sys.version < '3' and type(data) != unicode:
