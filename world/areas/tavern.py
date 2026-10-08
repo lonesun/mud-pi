@@ -1,10 +1,11 @@
 import time
 
-from . import into_overworld_map, get_season
+from . import into_overworld_map, get_season, get_weather
 
 SEASON = get_season()
 print("Current season:", SEASON)
-WEATHER = "clear"
+WEATHER = get_weather()
+print("Current weather:", WEATHER)
 
 import random
 random_objects = ["a mug", "a chair", "a table", "a barrel"]

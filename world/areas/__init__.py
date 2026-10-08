@@ -6,8 +6,8 @@ area_array = {}
 def into_overworld_map(new_rooms):
     area_array.update(new_rooms)
 
-__all__ = ["area_array", "into_overworld_map", "get_season"]
-"""Exports the area array, the function to add new rooms, and the function to get the current season."""
+__all__ = ["area_array", "into_overworld_map", "get_season", "get_weather"]
+"""Exports the area array, the function to add new rooms, the function to get the current season, and the function to get the current weather."""
 
 def get_season():
     week = int(time.strftime("%U"))
@@ -19,3 +19,7 @@ def get_season():
         return "autumn"
     else:
         return "winter"
+
+def get_weather():
+    # Placeholder function for getting the current weather
+    return "clear"
