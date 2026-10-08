@@ -145,8 +145,7 @@ while on_switch.is_pressed:
 
                 # go through all the players in the game
                 for pid, pl in players.items():
-                    # if player is in the same room and isn't the player
-                    # sending the command
+
                     if players[pid]["room"] == players[id]["room"] \
                             and pid != id \
                             and emote_text:
@@ -156,8 +155,6 @@ while on_switch.is_pressed:
 
                     elif players[pid]["room"] == players[id]["room"] \
                             and pid != id:
-                        # send them a message telling them that the player
-                        # left the room
 
                         mud.send_message(pid, "{} left towards '{}'.".format(
                                                       players[id]["name"], ex))

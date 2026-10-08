@@ -3,9 +3,7 @@ import time
 from . import into_overworld_map, get_season, get_weather
 
 SEASON = get_season()
-print("Current season:", SEASON)
 WEATHER = get_weather()
-print("Current weather:", WEATHER)
 
 import random
 random_objects = ["a mug", "a chair", "a table", "a barrel"]
