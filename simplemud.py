@@ -1,3 +1,4 @@
+from threading import local
 import time
 
 from mudserver import MudServer
@@ -19,11 +20,16 @@ players = {}
 
 mud = MudServer()
 
-while True:
 
-    time.sleep(0.2)
+# control_switch(eingangspunkt)
+on_switch = local()
+on_switch.is_pressed = True
+while on_switch.is_pressed:
 
-    mud.update()
+    cpu_cycle = time.sleep(0.2)
+    cpu_cycle # cycle the game loop without consuming 100% CPU
+
+    mud.update() # tick/update the state of the MUD server
 
     # go through any newly connected players
     for id in mud.get_new_players():
