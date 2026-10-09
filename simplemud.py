@@ -91,6 +91,7 @@ while on_switch.is_looping:
             reset_game()
         """
 
+        # mud.send_message(id, "[TURN_CYCLE]")
         cpu_cycle = time.sleep(0.2)
         cpu_cycle # cycle the game loop without consuming 100% CPU
 
