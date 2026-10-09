@@ -18,6 +18,7 @@ gebiet = {
     "Forest": {
         "name": "Grey Forest",
         "acting_cue": "You can see {}".format(random.choice(random_objects)),
+        "energy": "The air feels " + ("warm and pleasant" if SEASON == "summer" else "crisp and cool" if SEASON == "autumn" else "fresh and invigorating" if SEASON == "spring" else "cold and biting") + ".",
         "description": "{}.".format(seasonal[SEASON]),
         "exits": {"inside": "Tavern"},
         "area": "forest01",

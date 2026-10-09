@@ -237,17 +237,32 @@ class MudServer(object):
             self.send_message(clid, "Upcoming adventure for week {} on {}:".format(week, day))
             to_mud(self, clid, "dta/ascii_art/castle.txt")
 
-    def look(self, id, focus=""):
+    def look(self, id, room, focus=""):
+        """Sends the description of the given room to the player with id `id`."""
         if focus == "high":
             self.send_message(id, "")
-            self.send_message(id, "=" * 77)
-            self.send_message(id, "=== " + rm["name"] + " " + "=" * (72 - len(rm["name"])))
             self.send_message(id, "")
-            self.send_message(id, rm["description"])
-            self.send_message(id, "=" * 77)
+            self.send_message(id, "")
+            self.send_message(id, "")
+            self.send_message(id, "nu" * 40)
+            self.send_message(id, "  <>" + "<<>>" * 18 + "<>")
+            self.send_message(id, "========> " + room["name"] + " <==" + "=" * (80 - len(room["name"]) - 14))
+            self.send_message(id, "")
+            self.send_message(id, "          - " + room["energy"])
+            self.send_message(id, "-" * 80)
+            self.send_message(id, room["description"])
+            self.send_message(id, "-" * 80)
+            self.send_message(id, room["acting_cue"])
+            self.send_message(id, "=" * 80)
+            self.send_message(id, "nu" * 40)
+            self.send_message(id, "")
         if focus == "glance":
             self.send_message(id, "")
-            self.send_message(id, rm["description"])
+            self.send_message(id, " -" * 40)
+            self.send_message(id, "")
+            self.send_message(id, "   o) This is what you see at a glance:")
+            self.send_message(id, room["description"])
+            self.send_message(id, "- " * 40)
 
     def _attempt_send(self, clid, data):
         # python 2/3 compatability fix - convert non-unicode string to unicode

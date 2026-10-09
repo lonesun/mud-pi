@@ -179,7 +179,7 @@ while on_switch.is_looping:
                 mud.send_message(id, "Commands:")
                 mud.send_message(id, "  say <message>  - Says something out loud, "
                                     + "e.g. 'say Hello'")
-                mud.send_message(id, "  look           - Examines the "
+                mud.send_message(id, "  look (l)       - Examines the "
                                     + "surroundings, e.g. 'look'")
                 mud.send_message(id, "  go <exit>      - Moves through the exit "
                                     + "specified, e.g. 'go outside'")
@@ -202,26 +202,23 @@ while on_switch.is_looping:
                 rm = rooms[players[id]["room"]]
 
                 # send the player back the description of their current room
-                mud.look(players[id], focus="high")
+                mud.look(id, rm, focus="high")
 
-                playershere = []
-                # go through every player in the game
-                for pid, pl in players.items():
-                    # if they're in the same room as the player
-                    if players[pid]["room"] == players[id]["room"]:
-                        # ... and they have a name to be shown
-                        if players[pid]["name"] is not None:
-                            # add their name to the list
-                            playershere.append(players[pid]["name"])
-                            playershere.append(players[pid]["echo"])
-                            playershere.sort()
-
+                # (name, echo) pairs, sorted by name, so each echo stays with its name
+                playershere = sorted(
+                    (pl["name"], pl["echo"])
+                    for pl in players.values()
+                    if pl["room"] == players[id]["room"] and pl["name"] is not None
+                )
+                names = [name for name, _ in playershere]
+                echoes = [echo for _, echo in playershere]
 
                 # send player a message containing the list of players in the room
-                mud.send_message(id, "-" * 77)
-                mud.send_message(id, "Players/actors here:\n{},    \n    {}".format(
-                                                        " ".join(playershere[::2]), ", ".join(playershere[1::2])))
-                mud.send_message(id, "-" * 77)
+                mud.send_message(id, "-" * 80)
+                mud.send_message(id, "Players/actors here:")
+                for pl in playershere:
+                    mud.send_message(id, "{}, {}".format(pl[1], pl[0]))
+                mud.send_message(id, "-" * 80)
 
                 # send player a message containing the list of exits from this room
                 mud.send_message(id, "Exits are: {}".format(
