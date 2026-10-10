@@ -26,6 +26,7 @@ seasonal = {
 gebiet = {
     "Tavern": {
         "name": "The Prancing Pony",
+        "into_event": "You enter the tavern.",
         "acting_cue": " You can see {}.".format(random.choice(random_objects)),
         "energy": "The air feels " + ("warm and pleasant" if SEASON == "summer" else "crisp and cool" if SEASON == "autumn" else "fresh and invigorating" if SEASON == "spring" else "cold and biting") + ".",
         "description": "{}.".format(seasonal["tavern"][SEASON]),
@@ -36,6 +37,7 @@ gebiet = {
     },
     "Outside": {
         "name": "Outside the Prancing Pony",
+        "into_event": "You step outside the tavern.",
         "acting_cue": "You can see {}.\nThe weather is {}.".format(random.choice(random_objects), WEATHER),
         "energy": "The air feels " + ("warm and pleasant" if SEASON == "summer" else "crisp and cool" if SEASON == "autumn" else "fresh and invigorating" if SEASON == "spring" else "cold and biting") + ".",
         "description": "{}. The weather is {}.".format(seasonal["outside"][SEASON], WEATHER),

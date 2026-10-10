@@ -284,12 +284,12 @@ while on_switch.is_looping:
                             # send them a message telling them that the player
                             # entered the room
                             mud.send_message(pid,
-                                            "{} arrived via exit '{}'".format(
-                                                        players[id]["uppercase_name"], ex))
+                                            "{} {}".format(
+                                                        players[id]["uppercase_name"], "entered the room."))
 
                     # send the player a message telling them where they are now
-                    mud.send_message(id, "You arrive at '{}'".format(
-                                                            players[id]["room"]))
+                    mud.send_message(id, "{}".format(
+                                                            rooms[players[id]["room"]]["into_event"]))
 
                 # the specified exit wasn't found in the current room
                 else:

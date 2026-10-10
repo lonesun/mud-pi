@@ -3,7 +3,7 @@ from contextlib import closing
 
 SCHEMA = "dta/players/schema.sql"
 DEFAULT_DB = "dta/players/roster.db"
-PLAYER_FIELDS = ("current_room", "description")
+PLAYER_FIELDS = ("current_room", "description") # todo: add score fields
 
 def _check_field(expected_field):
     if expected_field not in PLAYER_FIELDS:
