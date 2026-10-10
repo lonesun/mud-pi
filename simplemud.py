@@ -104,10 +104,14 @@ while on_switch.is_looping:
                 "echo": None,
                 "room": None,
                 "area": None,
+                "uppercase_name": format(["name"][0].upper()) + format(["name"][1:])
             }
 
+            print()
             print("New player connected with ID:", id)
+            print("---")
             print("Sending MOTD to new player with ID:", id)
+            print()
 
             week_count = time.strftime("%U")
             dotw = time.strftime("%A")
@@ -117,7 +121,6 @@ while on_switch.is_looping:
 
             mud.motd(week=week_count, day=dotw)
 
-            mud.send_message(id, "Greetings! What, tell me now, is /your/ name?")
             mud.send_message(id, "Please enter your name:")
             mud.send_message(id, "")
 
@@ -129,14 +132,23 @@ while on_switch.is_looping:
 
             # go through all the players in the game
             for pid, pl in players.items():
+                log_box_top    = "----------" + len(players[id]["uppercase_name"]) * "-" + (64 - len(players[id]["uppercase_name"])) * "-" + "--->-X"
+                log_box_middle = "  [GAME]  " +     players[id]["uppercase_name"] + " has disconnected from the server."
+                log_box_bottom = "----------" + len(players[id]["uppercase_name"]) * "-" + (64 - len(players[id]["uppercase_name"])) * "-" + "--->-X"
+
                 # send each player a message to tell them about the diconnected player
-                mud.send_message(pid, "[GAME] {} left the game.".format(
-                                                            players[id]["name"]))
+                mud.send_message(pid, log_box_top)
+                mud.send_message(pid, log_box_middle)
+                mud.send_message(pid, log_box_bottom)
 
             save_player(players[id])
 
             # remove the player's entry in the player dictionary
             del(players[id])
+
+            print()
+            print("Player disconnected with ID:", id)
+            print("---")
 
         # go through any new commands sent from players
         for id, command, params in mud.get_commands():
@@ -151,6 +163,7 @@ while on_switch.is_looping:
                 description = attempt_load(command, expected_field="description")
 
                 players[id]["name"] = command
+                players[id]["uppercase_name"] = players[id]["name"][0].upper() + players[id]["name"][1:]
                 players[id]["description"] = description
                 players[id]["echo_content"] = "An exceptional actor"
                 players[id]["echo"] = players[id]["echo_content"]
@@ -160,12 +173,10 @@ while on_switch.is_looping:
                 # go through all the players in the game
                 for pid, pl in players.items():
                     # send each player a message to tell them about the new player
-                    mud.send_message(pid, "{} entered the game".format(
-                                                            players[id]["name"]))
+                    mud.send_message(pid, "{} entered the game".format(players[id]["uppercase_name"]))
 
                 # send the new player a welcome message
-                mud.send_message(id, "Welcome to the game, {}. ".format(
-                                                            players[id]["name"])
+                mud.send_message(id, "Welcome to the game, {}. ".format(players[id]["uppercase_name"])
                                 + "Type 'help' for a list of commands. Have fun!")
 
                 # send the new player the description of their current room
@@ -194,7 +205,7 @@ while on_switch.is_looping:
                     if players[pid]["room"] == players[id]["room"]:
                         # send them a message telling them what the player said
                         mud.send_message(pid, "{} says, \"{}\"".format(
-                                                    players[id]["name"], params))
+                                                    players[id]["uppercase_name"], params))
 
             # 'look' command
             elif command == "look" or command == "l":
@@ -247,13 +258,13 @@ while on_switch.is_looping:
                                 and emote_text:
 
                             mud.send_message(pid, "{} => {}: {} {}".format(
-                                                        players[id]["name"], ex, players[id]["name"], emote_text))
+                                                        players[id]["uppercase_name"], ex, players[id]["uppercase_name"], emote_text))
 
                         elif players[pid]["room"] == players[id]["room"] \
                                 and pid != id:
 
                             mud.send_message(pid, "{} left towards '{}'.".format(
-                                                        players[id]["name"], ex))
+                                                        players[id]["uppercase_name"], ex))
 
                     # update the player's current room to the one the exit leads to
                     players[id]["room"] = rm["exits"][ex]
@@ -270,7 +281,7 @@ while on_switch.is_looping:
                             # entered the room
                             mud.send_message(pid,
                                             "{} arrived via exit '{}'".format(
-                                                        players[id]["name"], ex))
+                                                        players[id]["uppercase_name"], ex))
 
                     # send the player a message telling them where they are now
                     mud.send_message(id, "You arrive at '{}'".format(
@@ -290,7 +301,7 @@ while on_switch.is_looping:
                 for pid, pl in players.items():
                     if players[pid]["room"] == players[id]["room"]:
                         mud.send_message(pid, "{} {}".format(
-                                                    players[id]["name"], params))
+                                                    players[id]["uppercase_name"], params))
 
             # !!!NEW!!!
             elif command == "gush":
@@ -302,7 +313,7 @@ while on_switch.is_looping:
                             if players[pid]["area"] == players[id]["area"]]
                 for pid in get_recipients(command, id, same_area):
                     mud.send_message(pid, "Somewhere nearby...\n...{} {}".format(
-                                                players[id]["name"], params))
+                                                players[id]["uppercase_name"], params))
 
             elif command == "quit" or command == "q" or command == "QUIT":
                 mud.send_message(id, "Goodbye!")
@@ -311,7 +322,7 @@ while on_switch.is_looping:
                 for pid in players:
                     if pid != id:
                         mud.send_message(pid, "[GAME] {} left the game.".format(
-                                                            players[id]["name"]))
+                                                            players[id]["uppercase_name"]))
                 del players[id]
                 mud.disconnect_client(id)
 

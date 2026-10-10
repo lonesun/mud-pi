@@ -222,20 +222,21 @@ class MudServer(object):
             self.send_message(clid, "")
             self.send_message(clid, "")
             self.send_message(clid, "Welcome to the MUD server!")
-            self.send_message(clid, "---------------------------------------------------------------------")
-            self.send_message(clid, "This is a dual-character MUD world,")
-            self.send_message(clid, "in which a player logs in with both their avatar and their persona.")
-            self.send_message(clid, "Interactions from both characters are recommended so as to get the")
-            self.send_message(clid, "best experience.")
-            self.send_message(clid, "---------------------------------------------------------------------")
-            self.send_message(clid, "Today, a {}, falls on week {} out of 52.".format(day, week))
-            self.send_message(clid, "---------------------------------------------------------------------")
+            self.send_message(clid, "-" * 77)
+            self.send_message(clid, "Note from the developer: It is recommended to set your terminal width to at least 80 characters as this is the character width that the game has been designed for. Changing it involves recalibrating other elements, but I enjoy that kind of challenge. Use the 'ticket' command to weigh in, or the 'poke' command to send a nudge to the developer on open issues.")
+            self.send_message(clid, "-" * 77)
+            date_string = "Today, a {}, falls on week {} out of 52.".format(day, week)
+            self.send_message(clid, " " * ((80 - len(date_string)) // 2) + date_string)
+            self.send_message(clid, "-" * 77)
 
     def ascii_art(self, week, day):
         """Sends upcoming adventure ASCII art to all connecting players."""
         for clid in list(self._clients):
             self.send_message(clid, "Upcoming adventure for week {} on {}:".format(week, day))
             to_mud(self, clid, "dta/ascii_art/castle.txt")
+            self.send_message(clid, "")
+            self.send_message(clid, "Planned campaign overview:")
+            to_mud(self, clid, "dta/blurb/castle.txt")
 
     def look(self, id, room, focus=""):
         """Sends the description of the given room to the player with id `id`."""
