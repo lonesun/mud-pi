@@ -6,6 +6,8 @@ from mudserver import MudServer
 from world.areas import get_recipients
 from players import save as save_players, load as load_players, forget as forget_players
 
+from src.figlet import set_buffer, render_text
+
 from src import attempt_load, save_user_data, seed_database
 
 """A simple Multi-User Dungeon (MUD) game."""
@@ -119,6 +121,7 @@ while on_switch.is_looping:
             # upcoming adventure art
             mud.ascii_art(week=week_count, day=dotw)
 
+            mud.title("Grey Forest")
             mud.motd(week=week_count, day=dotw)
 
             mud.send_message(id, "Please enter your name:")

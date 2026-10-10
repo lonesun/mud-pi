@@ -14,6 +14,7 @@ import time
 import sys
 
 from dta import to_mud
+from src.figlet import set_buffer
 
 
 class MudServer(object):
@@ -214,6 +215,18 @@ class MudServer(object):
         self._listen_socket.bind((self._host, self._port))
         self._listen_socket.listen(5)
 
+    def title(self, title_text):
+        """Sends the title ASCII art to all connecting players."""
+        buffer = set_buffer(title_text)
+        for clid in list(self._clients):
+            for line in buffer:
+                terminal_width = 80
+                line_width = len(line)
+                remainder = terminal_width - line_width
+                left_padding = remainder // 2
+                right_padding = remainder // 2
+                self.send_message(clid, " " * left_padding + line + " " * right_padding)
+
     def motd(self, week, day):
         """Sends message of the day to all connecting players."""
         for clid in list(self._clients):
@@ -247,7 +260,8 @@ class MudServer(object):
             self.send_message(id, "")
             self.send_message(id, "nu" * 40)
             self.send_message(id, "  <>" + "<<>>" * 18 + "<>")
-            self.send_message(id, "========> " + room["name"] + " <==" + "=" * (80 - len(room["name"]) - 14))
+            self.title(room["name"])
+            # self.send_message(id, "========> " + room["name"] + " <==" + "=" * (80 - len(room["name"]) - 14))
             self.send_message(id, "")
             self.send_message(id, "          - " + room["energy"])
             self.send_message(id, "-" * 80)
