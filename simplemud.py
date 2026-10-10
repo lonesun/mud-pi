@@ -240,7 +240,7 @@ while on_switch.is_looping:
                                                         ", ".join(rm["exits"])))
 
             # 'go' command
-            elif command == "goto":
+            elif command == "goto" or command == "go":
 
                 # store the exit name, just the first word of the parameters
                 ex = params.lower().split()[0]
