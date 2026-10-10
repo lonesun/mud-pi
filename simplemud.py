@@ -14,7 +14,7 @@ players = {}
 
 mud = MudServer()
 
-def save_player(player):
+def save_player_position(player):
     """Persists a named player's room to the roster so they can resume where they left off."""
     if player["name"] is None:
         return
@@ -133,7 +133,7 @@ while on_switch.is_looping:
             # go through all the players in the game
             for pid, pl in players.items():
                 log_box_top    = "----------" + len(players[id]["uppercase_name"]) * "-" + (64 - len(players[id]["uppercase_name"])) * "-" + "--->-X"
-                log_box_middle = "  [GAME]  " +     players[id]["uppercase_name"] + " has disconnected from the server."
+                log_box_middle = "  [GAME]  " +     players[id]["uppercase_name"]        + " has disconnected from the server."
                 log_box_bottom = "----------" + len(players[id]["uppercase_name"]) * "-" + (64 - len(players[id]["uppercase_name"])) * "-" + "--->-X"
 
                 # send each player a message to tell them about the diconnected player
@@ -141,7 +141,7 @@ while on_switch.is_looping:
                 mud.send_message(pid, log_box_middle)
                 mud.send_message(pid, log_box_bottom)
 
-            save_player(players[id])
+            save_player_position(players[id])
 
             # remove the player's entry in the player dictionary
             del(players[id])
@@ -258,7 +258,8 @@ while on_switch.is_looping:
                                 and emote_text:
 
                             mud.send_message(pid, "{} => {}: {} {}".format(
-                                                        players[id]["uppercase_name"], ex, players[id]["uppercase_name"], emote_text))
+                                                        players[id]["uppercase_name"], ex,
+                                                        players[id]["uppercase_name"], emote_text))
 
                         elif players[pid]["room"] == players[id]["room"] \
                                 and pid != id:
