@@ -1,0 +1,1 @@
+1. Enable users to customise their own banner, instead of just the default `<<>>` pattern. (The 'look' band looks a lot like a friendship bracelet currently.)
