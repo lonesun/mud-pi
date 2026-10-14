@@ -17,10 +17,11 @@ players = {}
 mud = MudServer()
 
 def save_player_position(player):
-    """Persists a named player's room to the roster so they can resume where they left off."""
+    """Persists a named player's room and description to the roster."""
     if player["name"] is None:
         return
     save_user_data(player["name"], player["room"], expected_field="current_room")
+    save_user_data(player["name"], player["description"], expected_field="description")
 
 from world import area_array as rooms
 
@@ -321,8 +322,7 @@ while on_switch.is_looping:
 
             elif command == "quit" or command == "q" or command == "QUIT":
                 mud.send_message(id, "Goodbye!")
-                # Perform any necessary cleanup for the player here
-                save_player(players[id])
+                save_player_position(players[id])
                 for pid in players:
                     if pid != id:
                         mud.send_message(pid, "[GAME] {} left the game.".format(

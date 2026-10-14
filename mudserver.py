@@ -198,6 +198,9 @@ class MudServer(object):
         self._listen_socket.close()
 
     def disconnect_client(self, clid):
+        """Closes a single client's connection. Unlike a dropped connection,
+        no 'player left' event is queued, so the caller handles any cleanup.
+        """
         cl = self._clients.pop(clid, None)
         if cl is None:
             return
